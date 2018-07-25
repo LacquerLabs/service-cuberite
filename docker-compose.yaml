@@ -1,0 +1,12 @@
+version: '2'
+# Production
+services:
+  cuberite:
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    ports:
+      - "25565:25565"
+      - "8080:8080"
+    volumes:
+      - ${PWD}/volume/exim:/app
