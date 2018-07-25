@@ -1,0 +1,36 @@
+FROM alpine:3.8 as builder
+RUN apk --update --no-cache add build-base curl git make cmake clang
+WORKDIR /app
+RUN git clone --depth 1 --recursive https://github.com/cuberite/cuberite.git .
+RUN mkdir -p /app/release
+ENV BUILD=RELEASE
+RUN cd /app/release && cmake -DCMAKE_BUILD_TYPE=${BUILD} ..
+RUN cd /app/release && make -j`nproc`
+
+# FROM alpine:3.8
+
+# Load ash profile on launch
+ENV ENV="/etc/profile"
+
+# Set the timezone
+ENV TIMEZONE=UTC
+
+# Setup ash profile prompt and my old man alias
+# Create work directory
+RUN mv /etc/profile.d/color_prompt /etc/profile.d/color_prompt.sh && \
+	echo alias dir=\'ls -alh --color\' >> /etc/profile && \
+	echo cat /etc/os-release >> /etc/profile
+
+RUN echo @edge http://dl-cdn.alpinelinux.org/alpine/edge/main >> /etc/apk/repositories && \
+	echo @edgecommunity http://dl-cdn.alpinelinux.org/alpine/edge/community >> /etc/apk/repositories
+
+# install needed libraries
+RUN apk --update --no-cache add dumb-init tzdata ca-certificates && \
+	cp /usr/share/zoneinfo/${TIMEZONE} /etc/localtime && \
+	echo "${TIMEZONE}" > /etc/timezone && \
+	apk del tzdata && \
+	rm -f /var/cache/apk/*
+
+
+WORKDIR /app
+# COPY --from=builder /app /app
