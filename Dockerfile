@@ -37,13 +37,13 @@ COPY --from=builder /app/Server /app
 
 # Copy our local webadmin.ini to the server
 COPY ./configs/webadmin.ini /app/webadmin.ini
-COPY ./configs/settings.ini /app/configs/settings.ini
+# COPY ./configs/settings.ini /app/settings.ini
 
 # Our working directory
 WORKDIR /app
 
 # export our volume for persistance
-VOLUME ["/app/worlds"]
+VOLUME ["/app"]
 
 # expose our default ports
 EXPOSE 25565 8080
@@ -53,4 +53,4 @@ ENTRYPOINT ["/usr/bin/dumb-init", "--", "/entrypoint.sh"]
 
 # How we actually start our app
 # CMD ["./Cuberite"]
-CMD ["./Cuberite", "--port", "${PORT}", "--config-file", "configs/settings.ini"]
+CMD ["./Cuberite", "--port", "${PORT}", "--config-file", "settings.ini"]
