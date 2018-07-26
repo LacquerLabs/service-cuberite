@@ -1,12 +1,15 @@
 version: '2'
-# Production
 services:
   cuberite:
-    build:
-      context: .
-      dockerfile: ./Dockerfile
+    image: lacquerlabs/cuberite:latest
+    environment:
+      - PORT=25565
     ports:
       - "25565:25565"
       - "8080:8080"
     volumes:
-      - ${PWD}/volume/exim:/app
+      - volume_cuberite:/app
+
+volumes:
+  volume_cuberite:
+

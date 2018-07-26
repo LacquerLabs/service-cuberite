@@ -13,8 +13,8 @@ RUN git clone --depth 1 --recursive https://github.com/cuberite/cuberite.git .
 RUN mkdir -p /app/release
 
 # Set our build type
-ENV BUILD=RELEASE
-# ENV BUILD=DEBUG
+# ENV BUILD=RELEASE
+ENV BUILD=DEBUG
 
 # Run the configuration step
 RUN cd /app/release && cmake -DCMAKE_BUILD_TYPE=${BUILD} ..
